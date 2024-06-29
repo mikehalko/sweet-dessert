@@ -11,6 +11,14 @@
     <p>Name: <a th:text="${dessert.getName()}">Name here...</a></p>
     <p>Ingredients: <a th:text="${dessert.getIngredients()}">Ingredients here...</a></p>
 </div>
-<a href="/dessert">list</a>
+<form th:method="get" th:action="@{/dessert/edit/{id}(id=${dessert.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+<form th:method="delete" th:action="@{/dessert/delete/{id}(id=${dessert.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+<a href="/dessert">
+    <input type="button" value="List of Desserts" />
+</a>
 </body>
 </html>

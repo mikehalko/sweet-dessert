@@ -2,6 +2,8 @@ package ru.defezis.sweetdessert.data;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import ru.defezis.sweetdessert.exception.IncorrectDataException;
 import ru.defezis.sweetdessert.model.Dessert;
@@ -15,7 +17,7 @@ import java.util.List;
 public class DessertDataService {
 
     private static long ids = 1;
-    private static List<Dessert> dessertList = new ArrayList<>(List.of(
+    private static final List<Dessert> dessertList = new ArrayList<>(List.of(
             Dessert.builder().id(ids++).name("Cheesecake").build(),
             Dessert.builder().id(ids++).name("Ice cream").build(),
             Dessert.builder().id(ids++).name("Tiramisu").build(),
@@ -26,26 +28,75 @@ public class DessertDataService {
             Dessert.builder().id(ids++).name("Banana pudding").build()
     ));
 
-    public List<Dessert> getAll() {
+    /**
+     * Получить список всех Десертов.
+     *
+     * @return список десертов
+     */
+    @NotNull
+    public List<Dessert> list() {
         return List.copyOf(dessertList);
     }
 
     /**
-     * Метод вернет Десерт по заданному идентификатору.
+     * Найти Десерт по заданному идентификатору.
      *
      * @param id идентификатор Десерта
      * @return модель Десерта, либо null, если Десерт с таким id не найден
-     * @throws IncorrectDataException если Десертов с таким id более одного
      */
+    @Nullable
     public Dessert getById(long id) {
-        List<Dessert> result = dessertList.stream()
+        return dessertList.stream()
                 .filter(dessert -> dessert.getId().equals(id))
-                .toList();
+                .findFirst()
+                .orElse(null);
+    }
 
-        if (result.size() < 2) {
-            return result.get(0);
+    /**
+     * Добавить новый Десерт.
+     *
+     * @param dessert десерт
+     * @return идентификатор сохраненного десерта
+     */
+    @NotNull
+    public Long create(@NotNull Dessert dessert) {
+        dessert.setId(ids++);
+        dessertList.add(dessert);
+        log.info("Created Dessert with id {}", dessert.getId());
+        return dessert.getId();
+    }
+
+    /**
+     * Обновить существующий Десерт.
+     *
+     * @param updated Десерт для обновления
+     * @return обновленный Десерт
+     * @throws IncorrectDataException если десерт не найден по идентификатору
+     */
+    public Dessert update(@NotNull Dessert updated) {
+        Dessert dessert = dessertList.stream()
+                .filter(item -> item.getId().equals(updated.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IncorrectDataException("Dessert not found"));
+
+        dessert.setName(updated.getName());
+        dessert.setIngredients(updated.getIngredients());
+        log.debug("Updated dessert with id: {}", dessert.getId());
+
+        return dessert;
+    }
+
+    /**
+     * Удалить Десерт из списка по заданному идентификатору.
+     *
+     * @param id идентификатор
+     */
+    public void removeById(long id) {
+        boolean removed = dessertList.removeIf(dessert -> dessert.getId().equals(id));
+        if (removed) {
+            log.debug("Removed dessert with id: {}", id);
         } else {
-            throw new IncorrectDataException("tooManyDessertsResults");
+            log.warn("Failed to remove dessert with id: {}", id);
         }
     }
 }

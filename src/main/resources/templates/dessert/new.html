@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dessert</title>
+</head>
+<body>
+
+<div th:if="${dessertNew != null}">
+    <form method="POST" th:action="@{/dessert/create}" th:object="${dessertNew}">
+        <label for="name">Name: </label>
+        <input type="text" id="name" th:field="*{name}"/>
+        <br>
+        <input type="submit" value="Create new Dessert!"/>
+    </form>
+</div>
+<a href="/dessert">
+    <input type="button" value="List of Desserts" />
+</a>
+</body>
+</html>

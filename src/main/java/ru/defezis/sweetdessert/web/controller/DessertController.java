@@ -46,27 +46,35 @@ public class DessertController {
     }
 
     @PostMapping("/create")
-    public String save(@ModelAttribute Dessert dessertNew) {
+    public String save(@ModelAttribute("dessertNew") Dessert dessertNew, Model model) {
         log.info("Save new dessert={}", dessertNew);
         Long id = service.create(dessertNew);
-        log.info("New dessert created, id={}", id);
+        model.addAttribute("dessert", service.getDessert(id));
 
-        return "redirect:dessert/list";
+        return "redirect:/dessert";
     }
 
-    @PatchMapping("/update/{dessertId}")
-    public String update(@PathVariable long dessertId, @ModelAttribute Dessert dessertNew) {
-        log.info("Update dessert={} with id={}", dessertNew, dessertId);
-        service.update(dessertNew, dessertId);
-
-        return "redirect:dessert/{dessertId}";
+    @GetMapping("/edit/{dessertId}")
+    public String edit(@PathVariable long dessertId, Model model) {
+        log.info("Edit dessert");
+        model.addAttribute("dessertOld", service.getDessert(dessertId));
+        model.addAttribute("dessertUpdated", Dessert.builder().build());
+        return "dessert/edit";
     }
 
-    @DeleteMapping("/delete/{dessertId}")
+    @PostMapping("/update/{dessertId}")
+    public String update(@PathVariable long dessertId, @ModelAttribute("dessertUpdated") Dessert dessertUpdated) {
+        log.info("Update dessert={} with id={}", dessertUpdated, dessertId);
+        service.update(dessertUpdated, dessertId);
+
+        return "redirect:/dessert";
+    }
+
+    @PostMapping("/delete/{dessertId}")
     public String delete(@PathVariable long dessertId) {
         log.info("Delete dessert by id={}", dessertId);
         service.delete(dessertId);
 
-        return "redirect:dessert/list";
+        return "redirect:/dessert";
     }
 }
