@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dessert</title>
+</head>
+<body>
+<div th:if="${dessert != null}">
+    <h1>Dessert</h1>
+    <p>ID: <a th:text="${dessert.getId()}">Id here...</a></p>
+    <p>Name: <a th:text="${dessert.getName()}">Name here...</a></p>
+    <p>Ingredients: <a th:text="${dessert.getIngredients()}">Ingredients here...</a></p>
+</div>
+<form th:method="get" th:action="@{/dessert/edit/{id}(id=${dessert.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+<form th:method="delete" th:action="@{/dessert/delete/{id}(id=${dessert.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+<a href="/dessert">
+    <input type="button" value="List of Desserts" />
+</a>
+</body>
+</html>
