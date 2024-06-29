@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Desserts</title>
+</head>
+<body>
+<div th:if="${dessertList != null}">
+    <h1>List of Desserts</h1>
+    <ul>
+        <li th:each="dessertItem : ${dessertList}">
+            <a th:text="${dessertItem.getName()}"></a>
+            <a th:href="@{/dessert/{id}(id=${dessertItem.getId()})}">show</a>
+        </li>
+    </ul>
+</div>
+<a href="/">home</a>
+</body>
+</html>

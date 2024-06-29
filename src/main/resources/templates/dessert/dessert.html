@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dessert</title>
+</head>
+<body>
+<div th:if="${dessert != null}">
+    <h1>Dessert</h1>
+    <p>ID: <a th:text="${dessert.getId()}">Id here...</a></p>
+    <p>Name: <a th:text="${dessert.getName()}">Name here...</a></p>
+    <p>Ingredients: <a th:text="${dessert.getIngredients()}">Ingredients here...</a></p>
+</div>
+<a href="/dessert">list</a>
+</body>
+</html>
