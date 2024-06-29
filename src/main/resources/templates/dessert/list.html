@@ -10,10 +10,17 @@
     <ul>
         <li th:each="dessertItem : ${dessertList}">
             <a th:text="${dessertItem.getName()}"></a>
-            <a th:href="@{/dessert/{id}(id=${dessertItem.getId()})}">show</a>
+            <a th:href="@{/dessert/{id}(id=${dessertItem.getId()})}">
+                <input type="button" value="show" />
+            </a>
         </li>
     </ul>
 </div>
-<a href="/">home</a>
+<a href="/dessert/new">
+    <input type="button" value="Create new" />
+</a>
+<a href="/">
+    <input type="button" value="Home page" />
+</a>
 </body>
 </html>
