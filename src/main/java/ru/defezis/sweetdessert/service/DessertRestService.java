@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,7 @@ public class DessertRestService {
     private static final String CREATE_URL = "http://localhost:8081/api/dessert";
     private static final String UPDATE_URL = "http://localhost:8081/api/dessert/{dessertId}";
     private static final String DELETE_URL = "http://localhost:8081/api/dessert/{dessertId}";
+    private static final String CHECK_URL = "http://localhost:8081/api/check";
 
     private final RestTemplate rest;
 
@@ -97,5 +99,15 @@ public class DessertRestService {
      */
     public void delete(long dessertId) {
         rest.delete(DELETE_URL, dessertId);
+    }
+
+    public HttpStatusCode check() {
+        try {
+            ResponseEntity<ResponseEntity<String>> exchange =
+                    rest.exchange(CHECK_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+            return Objects.requireNonNull(exchange.getBody()).getStatusCode();
+        } catch (Exception e) {
+            return HttpStatusCode.valueOf(500);
+        }
     }
 }
