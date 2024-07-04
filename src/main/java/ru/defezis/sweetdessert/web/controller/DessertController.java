@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.defezis.sweetdessert.model.Dessert;
-import ru.defezis.sweetdessert.service.DessertService;
+import ru.defezis.sweetdessert.service.DessertRestService;
 
 import java.util.List;
 
@@ -16,12 +16,13 @@ import java.util.List;
 @RequestMapping("/dessert")
 public class DessertController {
 
-    private final DessertService service;
+    private final DessertRestService service;
 
     @GetMapping()
     public String list(Model model) {
         log.info("List of desserts");
         List<Dessert> result = service.getAll();
+
         model.addAttribute("dessertList", result);
         log.info("List size={}", result.size());
 
@@ -46,12 +47,11 @@ public class DessertController {
     }
 
     @PostMapping("/create")
-    public String save(@ModelAttribute("dessertNew") Dessert dessertNew, Model model) {
+    public String save(@ModelAttribute("dessertNew") Dessert dessertNew) {
         log.info("Save new dessert={}", dessertNew);
-        Long id = service.create(dessertNew);
-        model.addAttribute("dessert", service.getDessert(id));
+        Long dessertId = service.create(dessertNew);
 
-        return "redirect:/dessert";
+        return "redirect:/dessert/" + dessertId;
     }
 
     @GetMapping("/edit/{dessertId}")
@@ -67,7 +67,7 @@ public class DessertController {
         log.info("Update dessert={} with id={}", dessertUpdated, dessertId);
         service.update(dessertUpdated, dessertId);
 
-        return "redirect:/dessert";
+        return "redirect:/dessert/" + dessertId;
     }
 
     @PostMapping("/delete/{dessertId}")
