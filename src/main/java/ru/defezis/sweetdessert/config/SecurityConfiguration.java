@@ -2,7 +2,6 @@ package ru.defezis.sweetdessert.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,12 +24,17 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/token/**").permitAll()
                         .requestMatchers("/dessert", "/dessert/**").hasRole(USER.getName())
-                        .requestMatchers("/user/login", "/user/login/**").permitAll()
+                        .requestMatchers("/token/**").permitAll()
+                        .requestMatchers("/login","/login/new", "/user/login/create").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .formLogin(form -> {
+                    form.loginPage("/login");
+                    form.defaultSuccessUrl("/", true);
+                    form.failureUrl("/login?error");
+                    form.usernameParameter("username");
+                    form.passwordParameter("password");
+                });
 
         return http.build();
     }
