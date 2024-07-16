@@ -17,12 +17,7 @@ public class LoginController {
 
     private final UserService userService;
 
-    @GetMapping("/new")
-    public String register() {
-        return "user/registration";
-    }
-
-    @PostMapping
+    @PostMapping("/create")
     public String create(CreateUserRequest createUserRequest) { // TODO шифровать пароль сразу!, // TODO нужен id
         log.info("Create user");
         userService.save(createUserRequest);
