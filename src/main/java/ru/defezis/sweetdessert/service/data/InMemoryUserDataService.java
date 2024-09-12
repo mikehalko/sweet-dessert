@@ -30,7 +30,7 @@ public class InMemoryUserDataService extends InMemoryUserDetailsManager {
     public InMemoryUserDataService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
         this.userMap = new HashMap<>(Map.of(
-                "admin", makeUser("admin", "admin", ADMIN, USER),
+                "admin", makeUser("admin", "0", ADMIN, USER),
                 "user", makeUser("user", "user", USER)));
     }
 
