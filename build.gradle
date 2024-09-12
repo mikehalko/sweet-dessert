@@ -35,6 +35,8 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.jetbrains/annotations
 	implementation 'org.jetbrains:annotations:24.1.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

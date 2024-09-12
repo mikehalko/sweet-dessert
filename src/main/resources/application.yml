@@ -1,0 +1,22 @@
+server:
+  port: 9090
+
+spring:
+  security:
+    user:
+      name: admin
+      password: 0
+    oauth2:
+      client:
+        registration:
+          sweet-dessert-client:
+            provider: sweetdessert
+            client-id: sweet-dessert-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:9090/login/oauth2/code/{registrationId}"
+            scope: writeDesserts,deleteDesserts,openid
+
+        provider:
+          sweetdessert:
+            issuer-uri: "http://localhost:9000"
